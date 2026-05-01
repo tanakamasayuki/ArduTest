@@ -89,6 +89,14 @@ libraries:
 `LOG`, `ARTIFACT_TEXT`, `FAIL`, and `ERROR` use length-prefixed payloads.
 The payload bytes are not newline-terminated; the next `AT ...` message may start immediately after the payload.
 
+The default device-side config store is intentionally small:
+
+- max entries: `ARDUTEST_MAX_CONFIGS = 4`
+- config name length: `ARDUTEST_CONFIG_NAME_LENGTH = 31` bytes
+- config value length: `ARDUTEST_CONFIG_VALUE_LENGTH = 48` bytes
+
+These values can be overridden with compile-time defines before including `ArduTest.h`, but larger limits increase RAM usage on small boards.
+
 ## Library Manager Preparation
 
 This repository follows the Arduino 1.5 library layout:

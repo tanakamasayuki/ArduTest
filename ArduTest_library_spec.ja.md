@@ -238,6 +238,14 @@ Config は `arduino_test` 側から Arduino 側へ提供される環境依存値
 - 未提供の config 参照時は既定値を返せること
 - `REQUIRE_CONFIG` で必須 config を宣言できること
 
+初期実装の device 側 config store は固定長配列とし、既定値は以下とする。
+
+- 最大件数: `ARDUTEST_MAX_CONFIGS = 4`
+- config name 長: `ARDUTEST_CONFIG_NAME_LENGTH = 31` bytes
+- config value 長: `ARDUTEST_CONFIG_VALUE_LENGTH = 48` bytes
+
+これらは `ArduTest.h` を include する前に compile-time define で変更できる。ただし、上限を大きくすると Uno クラスの小容量ボードで RAM 使用量が増える。
+
 ---
 
 ## 6. テストライフサイクル
