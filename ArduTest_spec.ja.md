@@ -171,12 +171,14 @@ void loop() {
 ### 8.1 フロー
 
 ```
-1. 接続確立
-2. 初期同期
-3. テスト一覧取得
-4. 実行計画決定
-5. テスト実行
-6. 結果収集
+1. pytest が arduino-cli compile / upload を実行する
+2. pytest が serial 接続を開く
+3. pytest が必要なら reset / 起動待ちを行う
+4. 初期同期
+5. テスト一覧取得
+6. requirement / config に基づく実行計画決定
+7. テスト実行
+8. 結果収集
 ```
 
 ---
@@ -190,6 +192,8 @@ void loop() {
 - config
 - capability
 - 実行状態
+
+具体的な command / event / payload 形式は [`../../ARDUTEST_PROTOCOL_SPEC.ja.md`](../../ARDUTEST_PROTOCOL_SPEC.ja.md) で定義する。
 
 ---
 
@@ -358,20 +362,25 @@ arduino_test.reset()
 - 画像
 - 電流測定
 - トレンド
+
+---
+
+## 18. 関連仕様
+
+- Arduino ライブラリ仕様: [`ArduTest_library_spec.ja.md`](ArduTest_library_spec.ja.md)
+- 通信プロトコル仕様: [`../../ARDUTEST_PROTOCOL_SPEC.ja.md`](../../ARDUTEST_PROTOCOL_SPEC.ja.md)
 - 外部信号検証
 
 ---
 
-## 18. 非対象
+## 19. 非対象
 
-- 通信プロトコル詳細
-- メッセージ形式
 - 内部実装
 - 高度なテストフレームワーク機能
 
 ---
 
-## 19. 結論
+## 20. 結論
 
 ```
 ArduTest:
