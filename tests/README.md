@@ -19,6 +19,3 @@ If the pytest plugin repository and the ArduTest repository are checked out unde
 uv run --env-file .env pytest --profile=host ../ArduTest/tests/
 uv run --env-file .env pytest --profile=uno --port=/dev/ttyUSB0 ../ArduTest/tests/
 ```
-
-During development before Library Manager registration, each test runner's `sketch.yaml` uses `libraries: - dir: ../../` to reference this ArduTest checkout.
-After Library Manager registration, release branches or release assets may replace that with `ArduTest (x.y.z)` as needed.
