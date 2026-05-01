@@ -3,6 +3,8 @@
 ## Unreleased
 - (EN) Report duplicate test names as `ERROR duplicate_test` during LIST.
 - (JA) 重複 test name を LIST 時に `ERROR duplicate_test` として報告するように変更。
+- (EN) Add integration coverage for assertion failures, duplicate tests, protocol errors, and config store boundaries.
+- (JA) assertion failure、重複 test、protocol error、config store 境界の integration test を追加。
 
 ## 0.2.0
 - (EN) Initial experimental ArduTest library release.
