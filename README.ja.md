@@ -27,7 +27,6 @@ ArduTest は experimental です。
 - binary artifact
 - host 側での artifact ファイル保存
 - pytest report 連携の拡充
-- 重複 test name の報告
 - runtime skip semantics の安定化
 
 ## Quick Start
@@ -69,7 +68,7 @@ Arduino Libraries Index から使う場合は、再現性のために library ve
 
 ```yaml
 libraries:
-  - ArduTest (0.1.0)
+  - ArduTest (0.2.0)
 ```
 
 その sketch を `pytest-embedded-arduino-cli` から実行します。
@@ -101,7 +100,7 @@ payload bytes は newline 終端ではなく、payload の直後に次の `AT ..
 - syntax highlight 用の `keywords.txt`
 
 release tag は `library.properties` の version と合わせます。
-例えば `version=0.1.0` に対して tag は `v0.1.0` とします。
+例えば `version=0.2.0` に対して tag は `v0.2.0` とします。
 最初の GitHub Release を公開したあと、Arduino Library Manager index へ登録申請できます。
 
 ## ドキュメント

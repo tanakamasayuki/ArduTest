@@ -27,7 +27,6 @@ Not yet implemented or still subject to change:
 - binary artifacts
 - persisted artifact files on the host
 - richer pytest report integration
-- duplicate test name reporting
 - stable runtime skip semantics
 
 ## Quick Start
@@ -68,7 +67,7 @@ For reproducible tests, pin the library version when using the Arduino Libraries
 
 ```yaml
 libraries:
-  - ArduTest (0.1.0)
+  - ArduTest (0.2.0)
 ```
 
 Then run the sketch through `pytest-embedded-arduino-cli`:
@@ -99,7 +98,7 @@ This repository follows the Arduino 1.5 library layout:
 - examples under `examples/`
 - optional syntax highlighting in `keywords.txt`
 
-Release tags should match `library.properties` versions, for example `v0.1.0` for `version=0.1.0`.
+Release tags should match `library.properties` versions, for example `v0.2.0` for `version=0.2.0`.
 After the first GitHub release is published, the repository can be submitted to the Arduino Library Manager index.
 
 ## Documentation

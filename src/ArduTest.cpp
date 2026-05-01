@@ -58,6 +58,10 @@ void ArduTestRunner::registerTest(ArduTestCase *testCase)
     if (testCase->name && hasDuplicateName(testCase->name, testCase))
     {
         duplicateNames_ = true;
+        if (!duplicateName_)
+        {
+            duplicateName_ = testCase->name;
+        }
     }
 
     if (!tests_)
@@ -385,6 +389,12 @@ void ArduTestRunner::listProtocolTests()
 {
     if (!stream_)
     {
+        return;
+    }
+
+    if (duplicateNames_)
+    {
+        printError("duplicate_test", duplicateName_ ? duplicateName_ : "");
         return;
     }
 

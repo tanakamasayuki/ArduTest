@@ -1,6 +1,8 @@
 # Changelog / 変更履歴
 
 ## Unreleased
+- (EN) Report duplicate test names as `ERROR duplicate_test` during LIST.
+- (JA) 重複 test name を LIST 時に `ERROR duplicate_test` として報告するように変更。
 
 ## 0.2.0
 - (EN) Initial experimental ArduTest library release.

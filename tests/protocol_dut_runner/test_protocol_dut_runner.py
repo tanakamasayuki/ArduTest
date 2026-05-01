@@ -1,8 +1,11 @@
+import re
+
+
 def test_ardutest_protocol_over_dut(dut):
     dut.expect_exact("AT < READY")
 
     dut.write("AT > HELLO 1\n")
-    dut.expect_exact("AT < HELLO 1 ArduTest 0.1.0")
+    dut.expect(re.compile(rb"AT < HELLO 1 ArduTest \d+\.\d+\.\d+"))
 
     dut.write("AT > LIST\n")
     dut.expect_exact("AT < TEST test_true_passes")

@@ -81,6 +81,7 @@ private:
     ArduTestCase *current_;
     bool failed_;
     bool duplicateNames_;
+    const char *duplicateName_;
     bool started_;
     bool protocolMode_;
     char commandBuffer_[80];
