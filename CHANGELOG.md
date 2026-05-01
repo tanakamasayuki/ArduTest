@@ -1,6 +1,8 @@
 # Changelog / 変更履歴
 
 ## Unreleased
+
+## 0.2.1
 - (EN) Report duplicate test names as `ERROR duplicate_test` during LIST.
 - (JA) 重複 test name を LIST 時に `ERROR duplicate_test` として報告するように変更。
 - (EN) Add integration coverage for assertion failures, duplicate tests, protocol errors, and config store boundaries.
