@@ -4,7 +4,7 @@ profiles:
     platforms:
       - platform: arduino:avr (1.8.6)
     libraries:
-      - dir: ../../
+      - ArduTest (0.2.0)
 
   esp32:
     fqbn: esp32:esp32:esp32
@@ -12,6 +12,6 @@ profiles:
       - platform: esp32:esp32 (3.3.7)
         platform_index_url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
     libraries:
-      - dir: ../../
+      - ArduTest (0.2.0)
 
 default_profile: uno
