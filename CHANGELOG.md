@@ -1,6 +1,8 @@
 # Changelog / 変更履歴
 
 ## Unreleased
+
+## 0.2.0
 - (EN) Initial experimental ArduTest library release.
 - (JA) experimental な ArduTest ライブラリの初期リリース。
 - (EN) Add protocol version 1 support for HELLO, LIST, SET_CONFIG, CLEAR_CONFIG, RUN, RUN_ALL, RESET_STATE, logs, metrics, text artifacts, assertion failures, and results.
