@@ -98,6 +98,7 @@ private:
     void handleSetConfig(const char *fields);
     void drainBytes(size_t length);
     void printError(const char *code, const char *message);
+    void printPayloadEvent(const char *kind, const char *testName, const char *payload);
     void listProtocolTests();
     void listProtocolRequirements(const char *testName);
     bool runProtocol(const char *name);

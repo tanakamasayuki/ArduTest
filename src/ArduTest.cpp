@@ -356,10 +356,29 @@ void ArduTestRunner::printError(const char *code, const char *message)
         return;
     }
 
+    const char *payload = message ? message : "";
     stream_->print(F("AT < ERROR "));
     stream_->print(code ? code : "internal_error");
     stream_->print(F(" "));
-    stream_->println(message ? message : "");
+    stream_->println(strlen(payload));
+    stream_->print(payload);
+}
+
+void ArduTestRunner::printPayloadEvent(const char *kind, const char *testName, const char *payload)
+{
+    if (!stream_)
+    {
+        return;
+    }
+
+    const char *safePayload = payload ? payload : "";
+    stream_->print(F("AT < "));
+    stream_->print(kind);
+    stream_->print(F(" "));
+    stream_->print(testName ? testName : "-");
+    stream_->print(F(" "));
+    stream_->println(strlen(safePayload));
+    stream_->print(safePayload);
 }
 
 void ArduTestRunner::listProtocolTests()
@@ -420,29 +439,31 @@ bool ArduTestRunner::runProtocol(const char *name)
 
     if (stream_)
     {
-        stream_->println(F("AT < ERROR unknown_test 0"));
+        printError("unknown_test", name);
     }
     return false;
 }
 
 void ArduTestRunner::log(const char *message)
 {
-    printPrefix("LOG");
-    if (stream_)
-    {
-        stream_->println(message ? message : "");
-    }
+    printPayloadEvent("LOG", current_ ? current_->name : "-", message);
 }
 
 void ArduTestRunner::attachText(const char *name, const char *text)
 {
-    printPrefix("ARTIFACT_TEXT");
-    if (stream_)
+    if (!stream_)
     {
-        stream_->print(name ? name : "");
-        stream_->print(F(" "));
-        stream_->println(text ? text : "");
+        return;
     }
+
+    const char *safeText = text ? text : "";
+    stream_->print(F("AT < ARTIFACT_TEXT "));
+    stream_->print(current_ ? current_->name : "-");
+    stream_->print(F(" "));
+    stream_->print(name ? name : "");
+    stream_->print(F(" text/plain "));
+    stream_->println(strlen(safeText));
+    stream_->print(safeText);
 }
 
 void ArduTestRunner::reportMetric(const char *name, int value)
@@ -532,35 +553,49 @@ void ArduTestRunner::requireConfig(const char *name)
 void ArduTestRunner::fail(const char *expr, const char *file, int line)
 {
     failed_ = true;
-    printPrefix("FAIL");
-    if (stream_)
+    if (!stream_)
     {
-        stream_->print(file ? file : "");
-        stream_->print(F(":"));
-        stream_->print(line);
-        stream_->print(F(" "));
-        stream_->println(expr ? expr : "");
+        return;
     }
+
+    const char *payload = expr ? expr : "";
+    stream_->print(F("AT < FAIL "));
+    stream_->print(current_ ? current_->name : "-");
+    stream_->print(F(" "));
+    stream_->print(file ? file : "");
+    stream_->print(F(" "));
+    stream_->print(line);
+    stream_->print(F(" "));
+    stream_->println(strlen(payload));
+    stream_->print(payload);
 }
 
 void ArduTestRunner::failEqual(const char *expectedExpr, const char *actualExpr, long expected, long actual, const char *file, int line)
 {
     failed_ = true;
-    printPrefix("FAIL_EQ");
-    if (stream_)
+    if (!stream_)
     {
-        stream_->print(file ? file : "");
-        stream_->print(F(":"));
-        stream_->print(line);
-        stream_->print(F(" "));
-        stream_->print(expectedExpr ? expectedExpr : "");
-        stream_->print(F("="));
-        stream_->print(expected);
-        stream_->print(F(" "));
-        stream_->print(actualExpr ? actualExpr : "");
-        stream_->print(F("="));
-        stream_->println(actual);
+        return;
     }
+
+    char payload[80];
+    snprintf(
+        payload,
+        sizeof(payload),
+        "%s=%ld %s=%ld",
+        expectedExpr ? expectedExpr : "",
+        expected,
+        actualExpr ? actualExpr : "",
+        actual);
+    stream_->print(F("AT < FAIL "));
+    stream_->print(current_ ? current_->name : "-");
+    stream_->print(F(" "));
+    stream_->print(file ? file : "");
+    stream_->print(F(" "));
+    stream_->print(line);
+    stream_->print(F(" "));
+    stream_->println(strlen(payload));
+    stream_->print(payload);
 }
 
 bool ArduTestRunner::hasFailed() const

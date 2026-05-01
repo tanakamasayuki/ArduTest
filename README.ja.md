@@ -33,9 +33,35 @@ void loop() {
 }
 ```
 
+requirement と required config は metadata として公開できます。
+これにより host 側は test 実行前に skip 判定できます。
+
+```cpp
+TEST_CASE(test_needs_config) {
+  const char* sampleRate = ArduTest.config("sample_rate");
+  ArduTest.log(sampleRate);
+  ASSERT_TRUE(sampleRate[0] != '\0');
+}
+
+ARDUTEST_REQUIRE(test_needs_config, "measurement.current");
+ARDUTEST_REQUIRE_CONFIG(test_needs_config, "sample_rate");
+```
+
+pytest fixture から実行する例:
+
+```python
+def test_board(arduino_test):
+    arduino_test.run()
+```
+
 ## 現在の状態
 
-現時点では Arduino ライブラリの骨格とドラフト仕様を含みます。Arduino 側 API は Uno でも扱いやすいように小さく保っています。既存実装は仮の smoke test 用骨格であり、`pytest-embedded-arduino-cli` の `arduino_test` と連携する実装はプロトコル仕様を優先して設計します。
+core line protocol、test 一覧取得、単一 test 実行、requirement、required config、log、metric、text artifact、assertion failure は host と Uno の smoke test ができる程度まで実装済みです。
+API はまだ実験的で、Uno でも扱いやすい小さな構成に保っています。
+binary artifact、artifact のファイル保存、pytest report 連携の拡充、重複 test name の報告は未実装です。
+
+`LOG`、`ARTIFACT_TEXT`、`FAIL`、`ERROR` は length-prefixed payload を使います。
+payload bytes は newline 終端ではなく、payload の直後に次の `AT ...` message が続く場合があります。
 
 ## ドキュメント
 

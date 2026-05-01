@@ -33,9 +33,34 @@ void loop() {
 }
 ```
 
+Requirements and required config can be exposed as metadata so the host can decide skips before running a test:
+
+```cpp
+TEST_CASE(test_needs_config) {
+  const char* sampleRate = ArduTest.config("sample_rate");
+  ArduTest.log(sampleRate);
+  ASSERT_TRUE(sampleRate[0] != '\0');
+}
+
+ARDUTEST_REQUIRE(test_needs_config, "measurement.current");
+ARDUTEST_REQUIRE_CONFIG(test_needs_config, "sample_rate");
+```
+
+Run through the pytest fixture:
+
+```python
+def test_board(arduino_test):
+    arduino_test.run()
+```
+
 ## Current Status
 
-This repository currently contains the Arduino library skeleton and draft specifications. The Arduino-side API is intentionally small and Uno-friendly. The current implementation is only a temporary smoke-test skeleton; the future `arduino_test` integration for `pytest-embedded-arduino-cli` should be designed against the protocol specification.
+The core line protocol, test listing, single-test execution, requirements, required config, logs, metrics, text artifacts, and assertion failures are implemented enough for host and Uno smoke tests.
+The API is still experimental and intentionally small and Uno-friendly.
+Binary artifacts, persisted artifact files, richer pytest report integration, and duplicate-name reporting are still pending.
+
+`LOG`, `ARTIFACT_TEXT`, `FAIL`, and `ERROR` use length-prefixed payloads.
+The payload bytes are not newline-terminated; the next `AT ...` message may start immediately after the payload.
 
 ## Documentation
 
