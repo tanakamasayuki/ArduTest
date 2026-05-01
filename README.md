@@ -2,16 +2,33 @@
 
 [日本語 README](README.ja.md)
 
-ArduTest is a small Arduino-side library for defining real-device tests and observations in Arduino sketches.
+ArduTest is a small Arduino-side library for writing real-device tests and observation code in Arduino sketches.
 
-It is intended to work with an `arduino_test` fixture extension for `pytest-embedded-arduino-cli`. The Arduino library provides the test definitions and runtime hooks; the pytest side is expected to handle flashing, synchronization, environment capabilities, configuration, result collection, and artifacts.
+It is intended to work with the experimental `arduino_test` fixture provided by `pytest-embedded-arduino-cli`.
+The Arduino library defines tests and emits protocol events; the pytest side handles build/upload, synchronization, config, requirement evaluation, result collection, and pytest assertions.
 
-## Goals
+## Status
 
-- Make minimal real-device tests practical on Arduino Uno-class boards.
-- Keep the core API small and portable across Arduino CLI compatible boards.
-- Provide hooks for logs, text artifacts, metrics, requirements, and configuration.
-- Avoid becoming a large general-purpose unit test framework.
+ArduTest is experimental.
+The first release targets a small protocol-compatible core that works on Arduino Uno-class boards and host Arduino core smoke tests.
+
+Implemented core features:
+
+- `TEST_CASE`
+- `ASSERT_TRUE`, `ASSERT_FALSE`, `ASSERT_EQ`, `ASSERT_NE`
+- `ArduTest.begin()` and `ArduTest.poll()`
+- logs, integer/double metrics, and text artifacts
+- required capability/config metadata with `ARDUTEST_REQUIRE` and `ARDUTEST_REQUIRE_CONFIG`
+- small config store populated by the host protocol
+- ArduTest protocol version `1`
+
+Not yet implemented or still subject to change:
+
+- binary artifacts
+- persisted artifact files on the host
+- richer pytest report integration
+- duplicate test name reporting
+- stable runtime skip semantics
 
 ## Quick Start
 
@@ -37,37 +54,58 @@ Requirements and required config can be exposed as metadata so the host can deci
 
 ```cpp
 TEST_CASE(test_needs_config) {
-  const char* sampleRate = ArduTest.config("sample_rate");
-  ArduTest.log(sampleRate);
-  ASSERT_TRUE(sampleRate[0] != '\0');
+  ASSERT_TRUE(ArduTest.config("sample_rate")[0] != '\0');
 }
 
 ARDUTEST_REQUIRE(test_needs_config, "measurement.current");
 ARDUTEST_REQUIRE_CONFIG(test_needs_config, "sample_rate");
 ```
 
-Run through the pytest fixture:
+## Use From pytest
+
+Declare ArduTest in the sketch's `sketch.yaml`.
+For reproducible tests, pin the library version when using the Arduino Libraries Index:
+
+```yaml
+libraries:
+  - ArduTest (0.1.0)
+```
+
+Then run the sketch through `pytest-embedded-arduino-cli`:
 
 ```python
 def test_board(arduino_test):
     arduino_test.run()
 ```
 
-## Current Status
+During local development before the library is available from Library Manager, a sketch can refer to a local checkout:
 
-The core line protocol, test listing, single-test execution, requirements, required config, logs, metrics, text artifacts, and assertion failures are implemented enough for host and Uno smoke tests.
-The API is still experimental and intentionally small and Uno-friendly.
-Binary artifacts, persisted artifact files, richer pytest report integration, and duplicate-name reporting are still pending.
+```yaml
+libraries:
+  - dir: ../../
+```
+
+## Protocol Notes
 
 `LOG`, `ARTIFACT_TEXT`, `FAIL`, and `ERROR` use length-prefixed payloads.
 The payload bytes are not newline-terminated; the next `AT ...` message may start immediately after the payload.
+
+## Library Manager Preparation
+
+This repository follows the Arduino 1.5 library layout:
+
+- `library.properties` at the repository root
+- public headers and sources under `src/`
+- examples under `examples/`
+- optional syntax highlighting in `keywords.txt`
+
+Release tags should match `library.properties` versions, for example `v0.1.0` for `version=0.1.0`.
+After the first GitHub release is published, the repository can be submitted to the Arduino Library Manager index.
 
 ## Documentation
 
 - Overall spec (Japanese): [`ArduTest_spec.ja.md`](ArduTest_spec.ja.md)
 - Arduino library spec (Japanese): [`ArduTest_library_spec.ja.md`](ArduTest_library_spec.ja.md)
-- Protocol spec (Japanese): [`../../ARDUTEST_PROTOCOL_SPEC.ja.md`](../../ARDUTEST_PROTOCOL_SPEC.ja.md)
-- Example: [`examples/Basic`](examples/Basic)
 
 ## License
 
