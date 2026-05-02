@@ -3,6 +3,7 @@ __pycache__/
 .env
 pytest.ini
 uv.lock
+report.html
 
 # Generated bundle and helper downloads
 tools/cache/
