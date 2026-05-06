@@ -2,6 +2,16 @@
 
 This directory contains integration tests for running the ArduTest library through `pytest-embedded-arduino-cli`.
 
+## User-facing usage
+
+- `user_usage_runner`
+  - Shows the recommended user flow through the `arduino_test` fixture.
+  - Covers listing tests, running a simple test, skipped tests from missing requirements/config, `set_capability()`, `set_config()`, metrics, text artifacts, and binary artifacts.
+
+Use this runner first when you want to understand how a project test should be written.
+
+## ArduTest library and protocol coverage
+
 - `protocol_dut_runner`
   - Checks the ArduTest protocol directly with `dut.write(...)` and `dut.expect_exact(...)`.
 - `protocol_runner`
@@ -12,6 +22,8 @@ This directory contains integration tests for running the ArduTest library throu
   - Checks that duplicate test names emit `ERROR duplicate_test`.
 - `protocol_error_runner`
   - Checks unknown command/test handling, SET_CONFIG boundaries, config store limits, and CLEAR_CONFIG.
+
+These runners are primarily for ArduTest implementation coverage. They intentionally inspect protocol details that normal user tests should not need to assert.
 
 If the pytest plugin repository and the ArduTest repository are checked out under the same parent directory, run these tests from the pytest plugin repository:
 

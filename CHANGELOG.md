@@ -1,6 +1,8 @@
 # Changelog / 変更履歴
 
 ## Unreleased
+- (EN) Add `tests/user_usage_runner` to separate user-facing pytest usage examples from ArduTest library/protocol coverage.
+- (JA) ユーザー向け pytest 利用例と ArduTest library / protocol coverage を分けるため、`tests/user_usage_runner` を追加。
 - (EN) Update pytest integration tests to use `arduino_test.set_config()` and `set_capability()` for fixed ArduTest values.
 - (JA) pytest integration test の固定 ArduTest 値を `arduino_test.set_config()` / `set_capability()` で渡すように変更。
 - (EN) Add `ArduTest.attachBinary()` for `ARTIFACT_BINARY` raw binary artifacts.
