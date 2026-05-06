@@ -32,3 +32,32 @@ If the pytest plugin repository and the ArduTest repository are checked out unde
 uv run --env-file .env pytest --profile=host ../ArduTest/tests/
 uv run --env-file .env pytest --profile=uno --port=/dev/ttyUSB0 ../ArduTest/tests/
 ```
+
+## Updating the pytest plugin dependency
+
+`tests/uv.lock` pins the exact `pytest-embedded-arduino-cli` version used when running from the ArduTest `tests/` project.
+
+Do not delete `uv.lock` as the normal update procedure. Deleting it forces uv to resolve every dependency again, which may upgrade unrelated packages and make the change harder to review.
+
+To update only the pytest plugin to the latest version allowed by `tests/pyproject.toml`:
+
+```sh
+cd tests
+uv lock --upgrade-package pytest-embedded-arduino-cli
+uv sync
+```
+
+To pin a specific released version, first update `tests/pyproject.toml`, then refresh the lock file:
+
+```sh
+cd tests
+uv add "pytest-embedded-arduino-cli>=1.2,<1.3"
+uv sync
+```
+
+For local development of the pytest plugin, run from the `pytest-embedded-arduino-cli` checkout instead. That uses the local plugin source tree and does not require changing ArduTest's lock file:
+
+```sh
+cd ../pytest-embedded-arduino-cli
+uv run pytest ../ArduTest/tests/
+```

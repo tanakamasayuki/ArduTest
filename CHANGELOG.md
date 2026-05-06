@@ -1,6 +1,8 @@
 # Changelog / 変更履歴
 
 ## Unreleased
+- (EN) Document how to update the `pytest-embedded-arduino-cli` dependency in the ArduTest tests project with uv without deleting the lock file.
+- (JA) ArduTest tests project の `pytest-embedded-arduino-cli` 依存を、lock file を削除せず uv で更新する手順を追記。
 - (EN) Expand README usage documentation for what to write in the Arduino sketch and pytest test, including requirements, config, logs, metrics, text artifacts, and binary artifacts.
 - (JA) Arduino sketch と pytest test に何を書くかを、requirement、config、log、metric、text artifact、binary artifact を含めて README に詳しく追記。
 - (EN) Add `tests/user_usage_runner` to separate user-facing pytest usage examples from ArduTest library/protocol coverage.
