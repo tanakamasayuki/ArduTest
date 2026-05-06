@@ -59,6 +59,7 @@ public:
 
     void log(const char *message);
     void attachText(const char *name, const char *text);
+    void attachBinary(const char *name, const char *contentType, const uint8_t *data, size_t length);
     void reportMetric(const char *name, int value);
     void reportMetric(const char *name, long value);
     void reportMetric(const char *name, double value);

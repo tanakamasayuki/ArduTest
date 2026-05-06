@@ -87,7 +87,8 @@ libraries:
 
 ## protocol の注意点
 
-`LOG`、`ARTIFACT_TEXT`、`FAIL`、`ERROR` は length-prefixed payload を使います。
+`LOG`、`ARTIFACT_TEXT`、`FAIL`、`ERROR` は length-prefixed UTF-8 payload を使います。
+`ARTIFACT_BINARY` は length-prefixed raw binary payload を使います。
 payload bytes は newline 終端ではなく、payload の直後に次の `AT ...` message が続く場合があります。
 
 device 側 config store の default は、Uno でも扱いやすいように小さくしています。

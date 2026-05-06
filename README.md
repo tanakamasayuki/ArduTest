@@ -86,7 +86,8 @@ libraries:
 
 ## Protocol Notes
 
-`LOG`, `ARTIFACT_TEXT`, `FAIL`, and `ERROR` use length-prefixed payloads.
+`LOG`, `ARTIFACT_TEXT`, `FAIL`, and `ERROR` use length-prefixed UTF-8 payloads.
+`ARTIFACT_BINARY` uses a length-prefixed raw binary payload.
 The payload bytes are not newline-terminated; the next `AT ...` message may start immediately after the payload.
 
 The default device-side config store is intentionally small:

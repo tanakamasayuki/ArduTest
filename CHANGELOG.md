@@ -1,6 +1,10 @@
 # Changelog / 変更履歴
 
 ## Unreleased
+- (EN) Add `ArduTest.attachBinary()` for `ARTIFACT_BINARY` raw binary artifacts.
+- (JA) `ARTIFACT_BINARY` の raw binary artifact を送信する `ArduTest.attachBinary()` を追加。
+- (EN) Extend host integration coverage to verify text and binary artifacts are saved by pytest.
+- (JA) text / binary artifact が pytest 側で保存されることを確認する host integration test を追加。
 
 ## 0.2.1
 - (EN) Report duplicate test names as `ERROR duplicate_test` during LIST.

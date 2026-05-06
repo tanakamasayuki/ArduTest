@@ -12,7 +12,9 @@ def test_ardutest_protocol_list_run_and_save_artifact(monkeypatch, request, ardu
     monkeypatch.setenv("ARDUINO_TEST_CAP_MEASUREMENT_CURRENT", "true")
     monkeypatch.setenv("ARDUINO_TEST_CONFIG_SAMPLE_RATE", "1000")
     artifact_path = _artifact_path(request, "test_metric_and_artifact", "note.txt")
+    binary_artifact_path = _artifact_path(request, "test_metric_and_artifact", "data.bin")
     artifact_path.unlink(missing_ok=True)
+    binary_artifact_path.unlink(missing_ok=True)
 
     tests = arduino_test.list_tests()
 
@@ -23,6 +25,7 @@ def test_ardutest_protocol_list_run_and_save_artifact(monkeypatch, request, ardu
     assert tests[1].requirements == ("measurement.current",)
     assert tests[1].required_configs == ("sample_rate",)
     assert not artifact_path.exists()
+    assert not binary_artifact_path.exists()
 
     results = arduino_test.run("test_metric_and_artifact")
 
@@ -30,3 +33,4 @@ def test_ardutest_protocol_list_run_and_save_artifact(monkeypatch, request, ardu
     assert results[0].metrics == {"sample_rate": [1000], "example_value": [42]}
     assert results[0].artifacts == {"note.txt": "hello from ArduTest"}
     assert artifact_path.read_text(encoding="utf-8") == "hello from ArduTest"
+    assert binary_artifact_path.read_bytes() == b"\x00\x01\n\xff"

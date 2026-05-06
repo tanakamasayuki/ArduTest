@@ -23,4 +23,6 @@ def test_ardutest_protocol_over_dut(dut):
     dut.expect_exact("AT < METRIC test_metric_and_artifact example_value 42")
     dut.expect_exact("AT < ARTIFACT_TEXT test_metric_and_artifact note.txt text/plain 19")
     dut.expect_exact("hello from ArduTest")
+    dut.expect_exact("AT < ARTIFACT_BINARY test_metric_and_artifact data.bin application/octet-stream 4")
+    dut.expect_exact(b"\x00\x01\n\xff")
     dut.expect_exact("AT < RESULT test_metric_and_artifact passed")

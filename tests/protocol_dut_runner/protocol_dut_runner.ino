@@ -8,8 +8,11 @@ TEST_CASE(test_true_passes)
 
 TEST_CASE(test_metric_and_artifact)
 {
+  const uint8_t binary[] = {0x00, 0x01, 0x0a, 0xff};
+
   ArduTest.reportMetric("example_value", 42L);
   ArduTest.attachText("note.txt", "hello from ArduTest");
+  ArduTest.attachBinary("data.bin", "application/octet-stream", binary, sizeof(binary));
   ASSERT_EQ(42, 42);
 }
 

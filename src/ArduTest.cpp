@@ -476,6 +476,27 @@ void ArduTestRunner::attachText(const char *name, const char *text)
     stream_->print(safeText);
 }
 
+void ArduTestRunner::attachBinary(const char *name, const char *contentType, const uint8_t *data, size_t length)
+{
+    if (!stream_)
+    {
+        return;
+    }
+
+    stream_->print(F("AT < ARTIFACT_BINARY "));
+    stream_->print(current_ ? current_->name : "-");
+    stream_->print(F(" "));
+    stream_->print(name ? name : "");
+    stream_->print(F(" "));
+    stream_->print(contentType ? contentType : "application/octet-stream");
+    stream_->print(F(" "));
+    stream_->println(length);
+    if (data && length > 0)
+    {
+        stream_->write(data, length);
+    }
+}
+
 void ArduTestRunner::reportMetric(const char *name, int value)
 {
     reportMetric(name, (long)value);
