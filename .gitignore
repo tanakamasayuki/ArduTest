@@ -4,6 +4,7 @@ __pycache__/
 pytest.ini
 uv.lock
 report.html
+tests/ardutest/
 
 # Generated bundle and helper downloads
 tools/cache/
