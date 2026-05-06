@@ -5,8 +5,9 @@
 ## ユーザー向けの使い方
 
 - `user_usage_runner`
-  - `arduino_test` fixture を使った推奨フローを示します。
-  - test 一覧取得、単純な test 実行、requirement/config 不足による skip、`set_capability()`、`set_config()`、metric、text artifact、binary artifact を確認します。
+  - 小さな `.ino` sketch とシンプルな pytest test で推奨フローを示します。
+  - Arduino sketch 側で test case、requirement、config、log、metric、text artifact、binary artifact の書き方を示します。
+  - pytest 側は `set_capability()` / `set_config()` で固定値を渡し、`arduino_test.run()` を呼ぶだけにしています。
 
 project 側の pytest test をどう書くかを知りたい場合は、まずこの runner を見る想定です。
 

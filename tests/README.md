@@ -5,8 +5,9 @@ This directory contains integration tests for running the ArduTest library throu
 ## User-facing usage
 
 - `user_usage_runner`
-  - Shows the recommended user flow through the `arduino_test` fixture.
-  - Covers listing tests, running a simple test, skipped tests from missing requirements/config, `set_capability()`, `set_config()`, metrics, text artifacts, and binary artifacts.
+  - Shows the recommended user flow through a small `.ino` sketch and a simple pytest test.
+  - The Arduino sketch demonstrates test cases, requirements, config, logs, metrics, text artifacts, and binary artifacts.
+  - The pytest side only provides fixed values with `set_capability()` / `set_config()` and calls `arduino_test.run()`.
 
 Use this runner first when you want to understand how a project test should be written.
 
