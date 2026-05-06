@@ -1,6 +1,8 @@
 # Changelog / 変更履歴
 
 ## Unreleased
+- (EN) Expand README usage documentation for what to write in the Arduino sketch and pytest test, including requirements, config, logs, metrics, text artifacts, and binary artifacts.
+- (JA) Arduino sketch と pytest test に何を書くかを、requirement、config、log、metric、text artifact、binary artifact を含めて README に詳しく追記。
 - (EN) Add `tests/user_usage_runner` to separate user-facing pytest usage examples from ArduTest library/protocol coverage.
 - (JA) ユーザー向け pytest 利用例と ArduTest library / protocol coverage を分けるため、`tests/user_usage_runner` を追加。
 - (EN) Update pytest integration tests to use `arduino_test.set_config()` and `set_capability()` for fixed ArduTest values.

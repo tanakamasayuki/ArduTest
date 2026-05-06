@@ -17,19 +17,19 @@ ArduTest は experimental です。
 - `TEST_CASE`
 - `ASSERT_TRUE`, `ASSERT_FALSE`, `ASSERT_EQ`, `ASSERT_NE`
 - `ArduTest.begin()` / `ArduTest.poll()`
-- log、整数/double metric、text artifact
+- log、整数/double metric、text artifact、binary artifact
 - `ARDUTEST_REQUIRE` / `ARDUTEST_REQUIRE_CONFIG` による capability/config metadata
 - host protocol から設定される小さな config store
 - ArduTest protocol version `1`
 
 未実装または今後変更される可能性がある機能:
 
-- binary artifact
-- host 側での artifact ファイル保存
 - pytest report 連携の拡充
 - runtime skip semantics の安定化
 
 ## Quick Start
+
+### Arduino sketch
 
 ```cpp
 #include <ArduTest.h>
@@ -49,17 +49,80 @@ void loop() {
 }
 ```
 
-requirement と required config は metadata として公開できます。
-これにより host 側は test 実行前に skip 判定できます。
+各 `TEST_CASE` が 1 つの ArduTest test になります。pytest 側は `LIST` で test 一覧を取得し、`RUN` で実行します。
+
+test body では assertion を使います。
+
+- `ASSERT_TRUE(condition)`
+- `ASSERT_FALSE(condition)`
+- `ASSERT_EQ(expected, actual)`
+- `ASSERT_NE(expected, actual)`
+
+test から観測情報を pytest 側へ渡したい場合は、log、metric、artifact を使います。
+
+```cpp
+TEST_CASE(test_observability) {
+  const uint8_t bytes[] = {0x41, 0x54, 0x0a, 0x01};
+
+  ArduTest.log("collecting sample");
+  ArduTest.reportMetric("sample_rate", 1000);
+  ArduTest.attachText("sample_rate.txt", "1000");
+  ArduTest.attachBinary("sample.bin", "application/octet-stream", bytes, sizeof(bytes));
+  ASSERT_TRUE(true);
+}
+```
+
+requirement と required config は `TEST_CASE` の外に書きます。これらは pytest が test 実行前に使う metadata です。
 
 ```cpp
 TEST_CASE(test_needs_config) {
-  ASSERT_TRUE(ArduTest.config("sample_rate")[0] != '\0');
+  int sampleRate = ArduTest.configInt("sample_rate");
+  ASSERT_EQ(1000, sampleRate);
 }
 
 ARDUTEST_REQUIRE(test_needs_config, "measurement.current");
 ARDUTEST_REQUIRE_CONFIG(test_needs_config, "sample_rate");
 ```
+
+`ARDUTEST_REQUIRE` は host 側が満たすべき capability を宣言します。`ARDUTEST_REQUIRE_CONFIG` は pytest が実行前に送るべき config 値を宣言します。
+
+すべての sketch に必要な setup は次です。
+
+```cpp
+void setup() {
+  Serial.begin(115200);
+  ArduTest.begin();
+}
+
+void loop() {
+  ArduTest.poll();
+}
+```
+
+`ArduTest.begin()` は `Serial` 上で protocol service を開始します。`ArduTest.poll()` は、`LIST` や `RUN` などの pytest command を受信するために繰り返し呼び出します。
+
+### pytest test
+
+pytest 側では、固定値や test-local な値を `set_capability()` / `set_config()` で渡してから `run()` を呼びます。
+
+```python
+def test_board(arduino_test):
+    arduino_test.set_capability("measurement.current")
+    arduino_test.set_config("sample_rate", 1000)
+
+    arduino_test.run()
+```
+
+ArduTest 側が `failed` または `error` を返した場合、`arduino_test.run()` は pytest test を失敗にします。
+
+実行する PC、接続先、実機環境、secret に依存する値は、環境変数、`.env`、CI variables で渡すのを推奨します。
+
+```dotenv
+ARDUINO_TEST_CAP_MEASUREMENT_CURRENT=true
+ARDUINO_TEST_CONFIG_SAMPLE_RATE=1000
+```
+
+fixture API と環境変数の両方が同じ値を提供した場合は、fixture API が優先されます。
 
 ## pytest から使う
 
@@ -71,19 +134,14 @@ libraries:
   - ArduTest (0.2.0)
 ```
 
-その sketch を `pytest-embedded-arduino-cli` から実行します。
-
-```python
-def test_board(arduino_test):
-    arduino_test.run()
-```
-
 Library Manager に登録される前のローカル開発では、local checkout を参照できます。
 
 ```yaml
 libraries:
   - dir: ../../
 ```
+
+より具体的なユーザー向けの例は [`tests/user_usage_runner`](tests/user_usage_runner) を参照してください。
 
 ## protocol の注意点
 
