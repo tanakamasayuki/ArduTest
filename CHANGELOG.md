@@ -1,6 +1,8 @@
 # Changelog / 変更履歴
 
 ## Unreleased
+- (EN) Update pytest integration tests to use `arduino_test.set_config()` and `set_capability()` for fixed ArduTest values.
+- (JA) pytest integration test の固定 ArduTest 値を `arduino_test.set_config()` / `set_capability()` で渡すように変更。
 - (EN) Add `ArduTest.attachBinary()` for `ARTIFACT_BINARY` raw binary artifacts.
 - (JA) `ARTIFACT_BINARY` の raw binary artifact を送信する `ArduTest.attachBinary()` を追加。
 - (EN) Extend host integration coverage to verify text and binary artifacts are saved by pytest.

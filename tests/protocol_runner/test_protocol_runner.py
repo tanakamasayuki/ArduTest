@@ -8,9 +8,9 @@ def _artifact_path(request, test_name, filename):
     return artifact_dir / test_name / filename
 
 
-def test_ardutest_protocol_list_run_and_save_artifact(monkeypatch, request, arduino_test):
-    monkeypatch.setenv("ARDUINO_TEST_CAP_MEASUREMENT_CURRENT", "true")
-    monkeypatch.setenv("ARDUINO_TEST_CONFIG_SAMPLE_RATE", "1000")
+def test_ardutest_protocol_list_run_and_save_artifact(request, arduino_test):
+    arduino_test.set_capability("measurement.current")
+    arduino_test.set_config("sample_rate", 1000)
     artifact_path = _artifact_path(request, "test_metric_and_artifact", "note.txt")
     binary_artifact_path = _artifact_path(request, "test_metric_and_artifact", "data.bin")
     artifact_path.unlink(missing_ok=True)
